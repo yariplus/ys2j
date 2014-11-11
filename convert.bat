@@ -1,0 +1,1 @@
+java -jar ys2j.jar %*
