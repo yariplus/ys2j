@@ -16,7 +16,7 @@ public class Main
     
     public static void main(String[] args)
     {
-        // Read the block.csv and items.csv
+        // Read the block.csv and item.csv
         BufferedReader bufferedReader;
         boolean useBlockNames = true;
         Map<Integer, String> blockNames = new HashMap<Integer, String>();
@@ -47,9 +47,14 @@ public class Main
         {
             // Make sure it's a schematic
             String[] schematicPathTokens = schematicPath.split("[/\\\\]");
-            String schematicFile = schematicPathTokens[schematicPathTokens.length-1];
+            String schematicFile = schematicPathTokens[schematicPathTokens.length-1].split("\"")[0];
             String schematicName = schematicFile.split("\\.")[0];
-            if (!schematicFile.split("\\.")[1].equals("schematic")) continue;
+            System.out.println("Reading " + schematicFile);
+            if (!schematicFile.split("\\.")[1].equals("schematic"))
+            {
+                System.out.println("Reading failed. Not a .schematic file.");
+                continue;
+            }
 
             // Read the schematic
             FileInputStream schemInputStream;
@@ -90,6 +95,14 @@ public class Main
                     }
                 }
             }
+
+            //
+            String ss = "";
+            for (byte s: bytesAddBlock) ss = ss + " " + s;
+            System.out.println(ss);
+            String ii = "";
+            for (byte i: bytesBlock) ii = ii + " " + i;
+            System.out.println(ii);
 
             // Write the schematic
             try
@@ -214,7 +227,7 @@ public class Main
 
         writeToStreams("        " + listName + ".appendTag((NBTTagCompound)" + tagCompoundName + ");");
 
-        if(isTE) writeToStreams("        world.getTileEntity(x + " + teX + ", y + " + teY + ", z + " + teZ + ").readFromNBT(" + tagCompoundName + ");");
+        if (isTE) writeToStreams("        world.getTileEntity(x + " + teX + ", y + " + teY + ", z + " + teZ + ").readFromNBT(" + tagCompoundName + ");");
         if (isTE) writeToStreams("");
     }
 
